@@ -44,34 +44,22 @@ def callback(img):
 
     t=cv2.moments(binImg)
     #rospy.loginfo(t)
-    #if t["m00"]!= 0:
-    cX = int(t["m10"] / t["m00"])
-    cY = int(t["m01"] / t["m00"])
+    cX = -1
+    cY = -1
+    if t["m00"]!= 0:
+        # compute center of mass
+        cX = int(t["m10"] / t["m00"])
+        cY = int(t["m01"] / t["m00"])
 
-    # compute center of mass
-    #for c in contours:
-        # compute the center of the contour
-       # M = cv2.moments(c)
-        #rospy.loginfo(type(M))
 
-       # cX = int(M["m10"] / M["m00"])
-        #cY = int(M["m01"] / M["m00"])
 
-    # draw the contour and center of the shape on the image
-    #cv2.drawContours(bgr_img, [c], -1, (0, 255, 0), 2)
+    # draw the center of the shape on the image
     cv2.circle(bgr_img, (cX, cY), 7, (255, 255, 255), -1)
-    msg = Vector3
-    msg.x = cX
-    msg.y = cY
-    msg.z = 0
-    #pub(msg)
+
     array = [cX,cY]
     my_array_for_publishing = Int16MultiArray(data=array)
     pub(my_array_for_publishing)
     rospy.loginfo("msg sendt")
-
-
-
 
     #cv2.imshow("center of mass",bgr_img)
     #cv2.waitKey(2)
