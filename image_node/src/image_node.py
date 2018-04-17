@@ -12,6 +12,8 @@ import cv2
 import numpy
 import argparse
 from std_msgs.msg import String
+from std_msgs.msg import Int16MultiArray
+
 
 
 def main():
@@ -22,7 +24,7 @@ def main():
 
 
 def pub(data):
-    img_pub = rospy.Publisher("pixel_coord", Vector3,queue_size=1)
+    img_pub = rospy.Publisher("pixel_coord", Int16MultiArray,queue_size=1)
     img_pub.publish(data)
 
 def callback(img):
@@ -42,6 +44,7 @@ def callback(img):
 
     t=cv2.moments(binImg)
     #rospy.loginfo(t)
+    #if t["m00"]!= 0:
     cX = int(t["m10"] / t["m00"])
     cY = int(t["m01"] / t["m00"])
 
@@ -61,7 +64,10 @@ def callback(img):
     msg.x = cX
     msg.y = cY
     msg.z = 0
-    pub(msg)
+    #pub(msg)
+    array = [cX,cY]
+    my_array_for_publishing = Int16MultiArray(data=array)
+    pub(my_array_for_publishing)
     rospy.loginfo("msg sendt")
 
 
