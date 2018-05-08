@@ -42,8 +42,10 @@ def callback(img):
 
     t=cv2.moments(binImg)
     #rospy.loginfo(t)
-    cX = int(t["m10"] / t["m00"])
-    cY = int(t["m01"] / t["m00"])
+    if t["m00"] != 0: 
+    
+        cX = int(t["m10"] / t["m00"])
+        cY = int(t["m01"] / t["m00"])
 
     # compute center of mass
     #for c in contours:
@@ -67,7 +69,7 @@ def callback(img):
 
 
 
-    #cv2.imshow("center of mass",bgr_img)
+    cv2.imshow("center of mass",bgr_img)
     #cv2.waitKey(2)
 
 if __name__ == '__main__':
